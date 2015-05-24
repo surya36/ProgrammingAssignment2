@@ -1,0 +1,29 @@
+makeCachVector <- function(x = matrix()) {
+        k <- NULL
+        set <- function(y) {
+                x <<- y
+                k <<- NULL ## initialising inv to null
+        }
+        get <- function() x
+        setinv <- function(inv) k <<- inv
+        getinv <- function() k
+        list(set = set, get = get,
+             setinv = setinv,
+             getinv = getinv)
+        
+}
+
+cacheinv <- function(x, ...) {
+        m <- x$getinv()
+        if(!is.null(m)) {
+                message("getting cached data")
+                return(m)
+        }
+        data <- x$get()
+        m <- inv(data, ...)
+        x$setinv(m)
+        m
+}
+
+test<-matrix(sample.int(4, 100, TRUE), 4, 4)
+solve(test)
